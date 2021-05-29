@@ -30,9 +30,9 @@ namespace sql_employee_graphql_api.Repositories
             return _dbSet.FromSqlRaw<T>(procedureName, param).AsEnumerable().FirstOrDefault();
         }
 
-        // public IEnumerable<T> GetAll(string procedureName)
-        // {
-        //     return _dbSet.FromSqlRaw<T>(procedureName)
-        // }
+        public List<T> GetAll(string procedureName)
+        {
+            return _dbSet.FromSqlRaw<T>(procedureName).ToList();
+        }
     }
 }

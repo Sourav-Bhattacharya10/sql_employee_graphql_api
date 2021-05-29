@@ -14,6 +14,7 @@ using sql_employee_graphql_api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using sql_employee_graphql_api.Repositories;
+using Microsoft.Extensions.Options;
 
 namespace sql_employee_graphql_api
 {
@@ -29,6 +30,13 @@ namespace sql_employee_graphql_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<StoredProcedureConfigurations>(options => Configuration.GetSection(nameof(StoredProcedureConfigurations)).Bind(options));
+
+            // requires using Microsoft.Extensions.Options
+            services.AddSingleton<IStoredProcedureConfigurations>(sp => {
+                return sp.GetRequiredService<IOptions<StoredProcedureConfigurations>>().Value;
+            });
+
             services.AddControllers();
 
             services.AddDbContext<WorkDBContext>(opt => {
