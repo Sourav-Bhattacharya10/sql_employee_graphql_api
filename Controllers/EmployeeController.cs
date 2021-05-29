@@ -17,29 +17,40 @@ namespace sql_employee_graphql_api.Controllers
         private readonly ILogger<EmployeeController> _logger;
         private readonly IRepository<Employee> _empRepository;
 
-        // private readonly 
+        private readonly IStoredProcedureConfigurationEntity _empStoredProcedureConfigurationEntity;
 
-        public EmployeeController(ILogger<EmployeeController> logger, IRepository<Employee> empRepo)
+        public EmployeeController(ILogger<EmployeeController> logger, IRepository<Employee> empRepo, IStoredProcedureConfigurations spConfigs)
         {
             _logger = logger;
             _empRepository = empRepo;
+            _empStoredProcedureConfigurationEntity = spConfigs.Entities.SingleOrDefault(item => item.Name == "Employee");
         }
 
-        // // GET: api/employees
-        // [HttpGet("employees")]
-        // public IEnumerable<Employee> GetAllEmployees()
-        // {
-        //     IEnumerable<Employee> employees = _context.Employees.Where(emp => emp.EmployeeId != 0);
-            
-        //     return employees;
-        // }
-
         // GET: api/employees
+        [HttpGet("employees")]
+        public ActionResult<List<Employee>> GetAllEmployees()
+        {
+            List<Employee> employees = _empRepository.GetAll(_empStoredProcedureConfigurationEntity.GetAll);
+            
+            if(employees == null){
+                return StatusCode(500);
+            }
+
+            return employees;
+        }
+
+        // GET: api/employees/2
         [HttpGet("employees/{id}")]
-        public Employee GetEmployee(int id)
+        public ActionResult<Employee> GetEmployee(int id)
         {
             var param = new SqlParameter("@EmployeeID", id);
-            return _empRepository.Get("GetEmployee @EmployeeID", param);
+            var foundEmployee = _empRepository.Get(_empStoredProcedureConfigurationEntity.Get, param);
+
+            if(foundEmployee ==  null){
+                return StatusCode(500);
+            }
+
+            return Ok(foundEmployee);
         }
     }
 }

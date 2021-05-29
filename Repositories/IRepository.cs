@@ -10,6 +10,6 @@ namespace sql_employee_graphql_api.Repositories
 
         T Get(string procedureName, SqlParameter param);
 
-        // IEnumerable<T> GetAll(string procedureName);
+        List<T> GetAll(string procedureName);
     }
 }
