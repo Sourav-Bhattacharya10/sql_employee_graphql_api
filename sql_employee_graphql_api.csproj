@@ -5,6 +5,7 @@
     <UserSecretsId>304adc03-7256-4116-ade7-60689ce22fb6</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="HotChocolate.AspNetCore" Version="11.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
