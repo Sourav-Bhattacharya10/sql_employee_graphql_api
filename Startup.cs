@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using sql_employee_graphql_api.Repositories;
 using Microsoft.Extensions.Options;
+// using HotChocolate.AspNetCore;
 
 namespace sql_employee_graphql_api
 {
@@ -46,6 +47,10 @@ namespace sql_employee_graphql_api
                 });
 
             services.AddScoped<IRepository<Employee>, Repository<Employee>>();
+
+            // services.AddScoped<IQuery<Employee>, Query<Employee>>();
+
+            services.AddGraphQLServer().AddQueryType<Query<Employee>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +70,11 @@ namespace sql_employee_graphql_api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                // By default the GraphQL server is mapped to /graphql
+                // This route also provides you with our GraphQL IDE. In order to configure the
+                // the GraphQL IDE use endpoints.MapGraphQL().WithToolOptions(...).
+                endpoints.MapGraphQL();
             });
         }
     }
